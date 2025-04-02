@@ -25,11 +25,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OpenCloseMenuCanvas(bool state = true)
+    public void OpenMenuCanvas()
     {
-        IsMenu = state;
+        IsMenu = true;
 
-        MenuCanvas.SetActive(state);
+        MenuCanvas.SetActive(true);
+        PauseCanvas.SetActive(false);
+    }
+    
+    public void CloseMenuCanvas()
+    {
+        IsMenu = false;
+
+        MenuCanvas.SetActive(false);
         PauseCanvas.SetActive(false);
     }
 

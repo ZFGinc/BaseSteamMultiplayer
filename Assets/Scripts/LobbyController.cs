@@ -88,7 +88,7 @@ public class LobbyController : MonoBehaviour
     }
     public void UpdatePlayerList()
     {
-        UpdateLobbbyMenu();
+        UpdateLobbyMenu();
         if (!PlayerItemCreated) CreateHostPlayerItem();
         if (PlayerListItems.Count < Manager.GamePlayers.Count) CreateClientPlayerItem();
         if (PlayerListItems.Count > Manager.GamePlayers.Count) RemovePlayerItem();
@@ -106,11 +106,14 @@ public class LobbyController : MonoBehaviour
             GameObject NewPlayerItem = Instantiate(PlayerListItemPrefab) as GameObject;
             PlayerListItem NewPlayerItemScript = NewPlayerItem.GetComponent<PlayerListItem>();
 
+            Material skin = player.Skins[player.PlayerSkin];
+            player.PlayerSkinMesh.material = skin;
+
+            NewPlayerItemScript.Color = skin.color;
             NewPlayerItemScript.PlayerName = player.PlayerName;
             NewPlayerItemScript.ConnectionID = player.ConnectionID;
             NewPlayerItemScript.PlayerSteamID = player.PlayerSteamID;
             NewPlayerItemScript.Ready = player.Ready;
-            NewPlayerItemScript.Color = player.Skins[player.PlayerSkin].color;
             NewPlayerItemScript.SetPlayerValues();
 
             NewPlayerItem.transform.SetParent(PlayerListViewContent.transform, false);
@@ -129,11 +132,14 @@ public class LobbyController : MonoBehaviour
                 GameObject NewPlayerItem = Instantiate(PlayerListItemPrefab) as GameObject;
                 PlayerListItem NewPlayerItemScript = NewPlayerItem.GetComponent<PlayerListItem>();
 
+                Material skin = player.Skins[player.PlayerSkin];
+                player.PlayerSkinMesh.material = skin;
+
+                NewPlayerItemScript.Color = skin.color;
                 NewPlayerItemScript.PlayerName = player.PlayerName;
                 NewPlayerItemScript.ConnectionID = player.ConnectionID;
                 NewPlayerItemScript.PlayerSteamID = player.PlayerSteamID;
                 NewPlayerItemScript.Ready = player.Ready;
-                NewPlayerItemScript.Color = player.Skins[player.PlayerSkin].color;
                 NewPlayerItemScript.SetPlayerValues();
 
                 NewPlayerItem.transform.SetParent(PlayerListViewContent.transform, false);
@@ -151,9 +157,13 @@ public class LobbyController : MonoBehaviour
             {
                 if (PlayerListItemScript.ConnectionID == player.ConnectionID)
                 {
+                    Material skin = player.Skins[player.PlayerSkin];
+
+                    player.PlayerSkinMesh.material = skin;
+
+                    PlayerListItemScript.Color = skin.color;
                     PlayerListItemScript.PlayerName = player.PlayerName;
                     PlayerListItemScript.Ready = player.Ready;
-                    PlayerListItemScript.Color = player.Skins[player.PlayerSkin].color;
                     PlayerListItemScript.SetPlayerValues();
 
                     if (player == LocalplayerController) UpdateButton();
@@ -186,7 +196,7 @@ public class LobbyController : MonoBehaviour
             }
         }
     }
-    public void UpdateLobbbyMenu()
+    public void UpdateLobbyMenu()
     {
         if (!LobbyMenu.activeSelf) LobbyMenu.SetActive(true);
     }
@@ -197,8 +207,10 @@ public class LobbyController : MonoBehaviour
 
     public void LeaveGame(string SceneName)
     {
-        UIManager.Instance.DefaultMenu();
         LocalplayerController.CanStopGame(SceneName);
+        UIManager.Instance.OpenMenuCanvas();
+        UIManager.Instance.DefaultMenu();
+        SkinPreview.color = Color.black;
     }
 }
 

@@ -20,6 +20,7 @@ public class SteamLobby : MonoBehaviour
     public ulong CurrentLobbyID;
     private const string HostAddresKey = "HostAddres";
     private CustomNetworkManager manager;
+    private bool IsHost = false;
 
     private void Start()
     {
@@ -49,6 +50,7 @@ public class SteamLobby : MonoBehaviour
         Debug.Log("Created Lobby");
 
         manager.StartHost();
+        IsHost = true;
 
         SteamMatchmaking.SetLobbyData(
             new CSteamID(callback.m_ulSteamIDLobby),
@@ -91,9 +93,17 @@ public class SteamLobby : MonoBehaviour
     }
     public void LeaveLobby()
     {
-        SteamMatchmaking.LeaveLobby(new CSteamID(CurrentLobbyID));
+        if (IsHost)
+        {
+            manager.StopHost();
+            IsHost = false;
+        }
+
         manager.StopClient();
-        UIManager.Instance.OpenCloseMenuCanvas(true);
+        SteamMatchmaking.LeaveLobby(new CSteamID(CurrentLobbyID));
+        CurrentLobbyID = 0;
+        UIManager.Instance.OpenMenuCanvas();
+        UIManager.Instance.DefaultMenu();
     }
     private void OnGetLobbyList(LobbyMatchList_t result)
     {

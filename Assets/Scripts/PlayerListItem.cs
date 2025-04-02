@@ -74,16 +74,23 @@ public class PlayerListItem : MonoBehaviour
 
     public void GetPlayerIcon()
     {
+        if (AvatarReceived) return;
+
         int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)PlayerSteamID);
         if (ImageID == -1) return;
         PlayerIcon.texture = GetSteamImageAsTexture(ImageID);
     }
 
+    public void CangeSkin()
+    {
+        PlayerSkin.color = Color;
+    }
+
     public void SetPlayerValues()
     {
         PlayerNameText.text = PlayerName;
-        PlayerSkin.color = Color;
         ChangeReadyStatus();
-        if (!AvatarReceived) { GetPlayerIcon(); }
+        CangeSkin();
+        GetPlayerIcon();
     }
 }

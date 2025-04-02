@@ -94,30 +94,40 @@ public class PlayerObjectController : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            manager.ChangeScene(SceneName);
-            UIManager.Instance.OpenCloseMenuCanvas(true);
+            CmdCanStopGame(SceneName);
         }
     }
 
     [Command]
     public void CmdCanStartGame(string SceneName)
     {
+        Debug.Log("CMD Start");
         manager.ChangeScene(SceneName);
-        UIManager.Instance.OpenCloseMenuCanvas(false);
+    }
+    [Command]
+    public void CmdCanStopGame(string SceneName)
+    {
+        Debug.Log("CMD Stop");
+        manager.ChangeScene(SceneName);
     }
     [Command]
     private void CmdSetPlayerName(string playerName)
     {
+        Debug.Log("Change Name");
         this.PlayerNameUpdate(this.PlayerName, playerName);
     }
     [Command]
     private void CmdSetPlayerSkin(int playerSkin)
     {
+        Debug.Log("Change Skin");
         this.PlayerSkinUpdate(this.PlayerSkin, playerSkin);
+        CmdSetPlayerReady();
+        CmdSetPlayerReady();
     }
     [Command]
     private void CmdSetPlayerReady()
     {
+        Debug.Log("Change Ready");
         this.PlayerReadyUpdate(this.Ready, !this.Ready);
     }
 }
